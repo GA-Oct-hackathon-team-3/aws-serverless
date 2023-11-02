@@ -1,12 +1,16 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: >-
-  presently-lambda
+  presently
 Transform:
 - AWS::Serverless-2016-10-31
 
 # Resources declares the AWS resources that you want to include in the stack
 # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/resources-section-structure.html
 Resources:
+  PresentlyApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
   # Each Lambda function is defined by properties:
   # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
 
@@ -35,6 +39,22 @@ Resources:
           Type: Api
           Properties:
             Path: /
+            Method: GET
+
+  getTestFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/user/test.getTest
+      Runtime: nodejs18.x
+      Architectures:
+      - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /test
             Method: GET
   # Each Lambda function is defined by properties:
   # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
